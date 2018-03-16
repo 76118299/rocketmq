@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/tx/ http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+
+   <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" >
+      <property name="username" value=""/>
+      <property name="password" value=""/>
+      <property name="url" value=""/>
+   </bean>
+   <!--spring mybatis 整合-->
+   <bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+      <property name="dataSource" value="dataSource"/>
+      <property name="configLocation" value="classpath:sqlmapper/mybatis-config.xml"/>
+      <property name="mapperLocations" value="classpath:sqlmapper/mapper/*.xml"/>
+
+   </bean>
+   <!--mybatis dao 接口扫描-->
+   <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+      <property name="basePackage" value="com.ace.trade.mapper"/>
+      <property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryBean"/>
+
+
+   </bean>
+  <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+     <property name="dataSource" value="dataSource"/>
+  </bean>
+   <tx:advice id="txAdvice" transaction-manager="transactionManager"/>
+
+</beans>
